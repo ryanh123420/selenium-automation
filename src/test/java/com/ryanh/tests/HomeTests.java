@@ -11,15 +11,15 @@ import org.testng.annotations.Test;
 public class HomeTests extends BaseTest {
 
     /**
-     * Navigate to the Overview page for setting up assignments and notes
-     * URL: https://wowutils.com/viserio-cooldowns/raid/overview
+     * Navigate to the Planning Hub page for setting up assignments and notes
+     * URL: https://wowutils.com/viserio-cooldowns/planning
      */
     @Test
-    public void NavigateToOverview() {
+    public void NavigateToPlanningHub() {
         HomePage homePage = new HomePage(driver);
         driver.get("https://wowutils.com/viserio-cooldowns");
 
-        homePage.navigateToOverview();
-        Assert.assertEquals(driver.getCurrentUrl(), "https://wowutils.com/viserio-cooldowns/raid/overview");
+        homePage.navigateToPlanningHub();
+        Assert.assertEquals(driver.getCurrentUrl(), "https://wowutils.com/viserio-cooldowns/planning");
     }
 }

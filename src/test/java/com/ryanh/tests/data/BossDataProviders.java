@@ -26,10 +26,26 @@ public class BossDataProviders {
                 {"Fallen-King Salhadaar"},
                 {"Vaelgor & Ezzorak"},
                 {"Lightblinded Vanguard"},
-                //{"Crown of the Cosmos"},
+                {"Crown of the Cosmos"},
                 {"Chimaerus the Undreamt God"},
                 {"Belo'ren, Child of Al'ar"},
-                //{"Midnight Falls"},
+                {"Midnight Falls"},
+        };
+    }
+
+    @DataProvider(name = "MidnightSeason2")
+    public static Object[][] midnightSeason2() {
+        return new Object[][] {
+                {"Nek'zali the Soulcoiler"},
+                {"Entombed Sentinels"},
+                {"Vashnik the Malignant"},
+                {"The Lost Explorers"},
+                {"Sszorak"},
+                {"The Twin Fangs"},
+                {"The Coiled Altar"},
+                {"Ula'tek"},
+                {"Nymrissa Wavecaller"},
+                {"Kith'ix"},
         };
     }
 }

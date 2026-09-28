@@ -28,7 +28,6 @@ public abstract class BaseTest {
         homePage.navigateToLogin();
         //Battle.net credentials are saved as environment variables
         loginPage.login(System.getenv("BATTLENET_EMAIL_TEST"), System.getenv("BATTLENET_PASSWORD_TEST"));
-        homePage.acceptCookies();
     }
 
     /**

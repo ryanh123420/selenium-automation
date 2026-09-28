@@ -18,19 +18,24 @@ public class NoteTile extends BasePage {
 
     private final By toastNotification = By.cssSelector("section ol li");
 
+    //Menu that asks which list to copy into. It is portalled to the body, so it is not scoped to the tile root.
+    private final By copyDestinationMenu = By.cssSelector("div[role='menu']");
+    private final By copyToPersonalNotes = By.xpath("//div[@role='menuitem'][contains(., 'Personal Notes')]");
+
     public NoteTile(WebDriver driver, WebElement root) {
         super(driver);
         this.root = root;
     }
 
     /**
-     * Copies this note.
+     * Copies this note into the personal notes. Clicking copy opens a menu asking which list to copy into, so a
+     * destination has to be chosen before the copy happens and the toast appears.
      */
     public void copy() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(copyNoteButton));
-        wait.until(ExpectedConditions.elementToBeClickable(copyNoteButton));
-        root.findElement(copyNoteButton).click();
-        wait.until(ExpectedConditions.presenceOfElementLocated(toastNotification));
+        click(root, copyNoteButton);
+        waitUntilVisible(copyDestinationMenu);
+        click(copyToPersonalNotes);
+        waitUntilExists(toastNotification);
     }
 
     /**

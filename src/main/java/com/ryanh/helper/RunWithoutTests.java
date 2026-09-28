@@ -2,7 +2,7 @@ package com.ryanh.helper;
 
 import com.ryanh.pages.HomePage;
 import com.ryanh.pages.LoginPage;
-import com.ryanh.pages.OverviewPage;
+import com.ryanh.pages.PlanningHubPage;
 import com.ryanh.utils.DriverFactory;
 import org.openqa.selenium.WebDriver;
 
@@ -21,8 +21,8 @@ public class RunWithoutTests {
         homePage.navigateToLogin();
         loginPage.login(System.getenv("BATTLENET_EMAIL_TEST"), System.getenv("BATTLENET_PASSWORD_TEST"));
 
-        OverviewPage overviewPage = new OverviewPage(driver);
+        PlanningHubPage planningHubPage = new PlanningHubPage(driver);
 
-        driver.get("https://wowutils.com/viserio-cooldowns/raid/overview");
+        driver.get("https://wowutils.com/viserio-cooldowns/planning");
     }
 }

@@ -11,20 +11,22 @@ import java.util.NoSuchElementException;
  * Page where users can see an overview of all created cooldown and assignment notes.
  * TODO Add additional functionality and locators for changing difficulty, season, personal vs group, etc.
  */
-public class OverviewPage extends BasePage {
-    //Root element for "BossCard" components found on the overview page.
+public class PlanningHubPage extends BasePage {
+    //Root element for "BossCard" components found on the Planning Hub page.
     private final By bossCards = By.cssSelector("div.flex div.grid div.border:not(.items-center)");
     private final By sortingDropdown = By.cssSelector("div.rounded-sm button[role='combobox']");
     private final By sortingDropdownTable = By.cssSelector("div[role='presentation']");
     private final By personalNotes = By.xpath("//button[contains(text(), 'Personal')]");
     private final By groupNotes = By.xpath("//button[contains(text(), 'Group')]");
+    private final By cdNotes = By.xpath("//button[contains(text(), 'CD Notes')]");
 
-    public OverviewPage(WebDriver driver){
+
+    public PlanningHubPage(WebDriver driver){
         super(driver);
     }
 
     /**
-     * Get all BossCard objects on the Overview Page. Find all the root elements for each BossCard, then map those
+     * Get all BossCard objects on the Planning Hub page. Find all the root elements for each BossCard, then map those
      * roots to new BossCard objects, then convert to a List of BossCards.
      * @return - List of BossCard objects.
      */
@@ -68,8 +70,24 @@ public class OverviewPage extends BasePage {
                 .perform();
     }
 
+    public void showNotesTab() {
+        click(cdNotes);
+    }
+
     public void showPersonalNotes() {
         click(personalNotes);
+    }
+
+    public void waitForCards() {
+        waitUntilExists(bossCards);
+    }
+
+    /**
+     * Hides the ad rail that overlaps the rightmost column of boss cards, so clicks on those cards are not
+     * intercepted. Call this after each navigation to the Planning Hub.
+     */
+    public void hideAds() {
+        hideAdSlots();
     }
 
     public void showGroupNotes() {

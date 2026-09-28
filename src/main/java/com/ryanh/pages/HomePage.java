@@ -6,7 +6,7 @@ import org.openqa.selenium.WebDriver;
 
 public class HomePage extends BasePage {
 
-    private final By assignmentsPageButton = By.xpath("//span[contains(text(), 'Cooldowns Hub')]");
+    private final By assignmentsPageButton = By.xpath("//a[contains(text(), 'Open the Planning Hub')]");
     private final By battleNetLogin = By.xpath("//img[@alt='Battle.net']/ancestor::button");
     private final String pageURL = "https://wowutils.com/viserio-cooldowns";
 
@@ -14,9 +14,9 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
-    public void navigateToOverview() {
+    public void navigateToPlanningHub() {
         click(assignmentsPageButton);
-        waitForPageURL("https://wowutils.com/viserio-cooldowns/raid/overview");
+        waitForPageURL("https://wowutils.com/viserio-cooldowns/planning");
     }
 
     public void navigateToLogin() {

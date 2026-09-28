@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
- * UI component on the Overview page that allows creation of cooldown notes and assignments for a specific boss.
+ * UI component on the Planning Hub page that allows creation of cooldown notes and assignments for a specific boss.
  * TODO Add functionality for some of the less essential actions on a card.
  */
 public class BossCard extends BasePage {
@@ -16,23 +16,29 @@ public class BossCard extends BasePage {
     /**
      * Selectors for elements on a boss card that are always available regardless on if there are any notes created.
      */
-    private final By addNoteButton = By.cssSelector("div.grid div.flex button:not([title]):not(.border)");
+    private final By addNoteButton = By.cssSelector("button[title*='Create a CD Plan']");
     private final By expandViewButton = By.cssSelector("div.grid div.flex button[title='Open full view']");
-    private final By bossName = By.cssSelector("div.grid div.flex a[href*='/viserio-cooldowns/guides'] span");
+    //Read the name from the card header rather than the guide link, since bosses without a published guide have no
+    //guide link at all.
+    private final By bossName = By.cssSelector("span.font-cal");
     private final By bossGuideLink = By.cssSelector("div.grid div.flex a[href*='/viserio-cooldowns/guides']");
+    //Lives in a dialog portalled to the body, not inside the card, so this one is deliberately not root scoped.
+    private final By cdPlanButton = By.xpath("//button[.//p[normalize-space(text())='CD Plan']]");
 
     //Only available when no notes are created
-    private final By createANoteButton = By.xpath(".//button[contains(text(), 'Create a note')]");
+    //Matches on the button text rather than a title attribute, since the icon button in the card header uses
+    //"Create a CD Plan or template" as its title and would otherwise collide.
+    private final By createANoteButton = By.xpath(".//button[contains(., 'Create a CD Plan')]");
 
     //Locator for individual note tiles on this card
     private final By noteTile = By.cssSelector("div.grid div.box-border:not(.animate-pulse)");
 
     /**
      * When a BossCard is created, we set the root element so we can differentiate between different BossCards on the
-     * Overview Page.
+     * Planning Hub page.
      *
      * @param driver - WebDriver
-     * @param root   - Root element on the Overview page
+     * @param root   - Root element on the Planning Hub page
      */
     public BossCard(WebDriver driver, WebElement root) {
         super(driver);
@@ -53,10 +59,14 @@ public class BossCard extends BasePage {
      * notes editing page. Wait for the locator reference to become stale since we navigate to a different page.
      */
     public void addNote() {
-        root.findElement(addNoteButton).click();
-        waitForStaleElement(root.findElement(addNoteButton));
+        WebElement addButton = waitUntilClickable(root, addNoteButton);
+        addButton.click();
+        click(cdPlanButton);
+        waitForStaleElement(addButton);
         driver.navigate().back();
         waitUntilVisible(addNoteButton);
+        //The navigation rebuilds the page, which brings the ad slots back over the cards.
+        hideAdSlots();
     }
 
     /**
@@ -64,11 +74,24 @@ public class BossCard extends BasePage {
      * there are no notes.
      */
     public void createNote() {
-        waitUntilExists(createANoteButton);
-        root.findElement(createANoteButton).click();
-        waitForStaleElement(root.findElement(createANoteButton));
+        WebElement createButton = waitUntilClickable(root, createANoteButton);
+        createButton.click();
+        click(cdPlanButton);
+        waitForStaleElement(createButton);
         driver.navigate().back();
         waitUntilExists(bossName);
+        //The navigation rebuilds the page, which brings the ad slots back over the cards.
+        hideAdSlots();
+    }
+
+    /**
+     * Whether this boss has a published guide. Not every boss has one, so anything that follows the guide link needs
+     * to check first.
+     *
+     * @return - True if the card has a guide link, false if the boss has no guide yet.
+     */
+    public boolean hasGuide() {
+        return !root.findElements(bossGuideLink).isEmpty();
     }
 
     public void openBossGuide() {
@@ -82,8 +105,13 @@ public class BossCard extends BasePage {
      * @return - True if a note exists in the table, false if there are none.
      */
     public boolean isTilePresent() {
-        waitUntilVisible(noteTile);
-        return !root.findElements(noteTile).isEmpty();
+        try {
+            waitUntilVisible(root, noteTile);
+            return true;
+        } catch (TimeoutException e) {
+            //No tile showed up on this card within the wait, which is an answer rather than an error.
+            return false;
+        }
     }
 
     /**
@@ -101,7 +129,7 @@ public class BossCard extends BasePage {
      * @return - List of NoteTile instances scoped to each tile element.
      */
     public List<NoteTile> getNoteTiles() {
-        waitUntilVisible(noteTile);
+        waitUntilVisible(root, noteTile);
         return root.findElements(noteTile)
                 .stream()
                 .map(el -> new NoteTile(driver, el))

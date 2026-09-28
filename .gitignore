@@ -9,6 +9,7 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/remote-targets.xml
 *.iws
 *.iml
 *.ipr

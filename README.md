@@ -27,7 +27,7 @@ A Java Selenium test automation framework for the WoWUtils raid management web a
   │   ├── pages/
   │   │   ├── HomePage.java                     # Main navigation page
   │   │   ├── LoginPage.java                    # Authentication page
-  │   │   └── OverviewPage.java                 # Raid overview page
+  │   │   └── PlanningHubPage.java              # Raid setup and notes planning page
   │   └── utils/
   │       └── DriverFactory.java                # WebDriver factory with browser support
   └── test/java/
@@ -36,7 +36,7 @@ A Java Selenium test automation framework for the WoWUtils raid management web a
       │   │   └── BaseTest.java                 # Test setup and teardown
       │   └── tests/
       │       ├── HomeTests.java                
-      │       ├── OverviewTests.java            # Data-driven tests with TestNG
+      │       ├── PlanningHubTests.java         # Data-driven tests with TestNG
       │       └── data/
       │           └── BossDataProviders.java    # DataProviders for test case parameters
       └── testng.xml
